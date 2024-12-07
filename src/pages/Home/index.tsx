@@ -9,21 +9,21 @@ const Home = () => {
   const handleScroll = (e: WheelEvent) => {
     if (!containerRef.current) return;
 
-    const currentScroll = containerRef.current.scrollTop;
-    const sectionHeight = containerRef.current.offsetHeight;
+    const currentScroll = containerRef.current.scrollLeft;
+    const sectionWidth = containerRef.current.offsetWidth;
 
     if (e.deltaY > 0) {
-      // 滾動向下
-      const nextSectionIndex = Math.ceil(currentScroll / sectionHeight);
+      // 滾動向右
+      const nextSectionIndex = Math.ceil(currentScroll / sectionWidth);
       containerRef.current.scrollTo({
-        top: (nextSectionIndex + 1) * sectionHeight,
+        left: (nextSectionIndex + 1) * sectionWidth,
         behavior: 'smooth',
       });
     } else {
-      // 滾動向上
-      const prevSectionIndex = Math.floor(currentScroll / sectionHeight);
+      // 滾動向左
+      const prevSectionIndex = Math.floor(currentScroll / sectionWidth);
       containerRef.current.scrollTo({
-        top: (prevSectionIndex - 1) * sectionHeight,
+        left: (prevSectionIndex - 1) * sectionWidth,
         behavior: 'smooth',
       });
     }
@@ -34,11 +34,11 @@ const Home = () => {
     <div
       ref={containerRef}
       onWheel={handleScroll}
-      className="h-screen overflow-hidden scroll-smooth"
+      className="h-screen w-full flex overflow-hidden scroll-smooth"
     >
       {/* 第一個區塊 */}
       <section
-        className=" h-screen bg-cover bg-center flex items-center justify-center"
+        className="min-w-full h-screen bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: `url('src/assets/pictures/woman-with-book.jpg')`,
         }}
@@ -87,7 +87,7 @@ const Home = () => {
 
       {/* 第二個區塊 */}
       <section
-        className="relative h-screen bg-cover bg-center flex items-center justify-center text-white"
+        className="min-w-full relative h-screen bg-cover bg-center flex items-center justify-center text-white"
         style={{
           backgroundImage: `url('src/assets/pictures/cozy-evening-read-stockcake.jpg')`,
         }}
@@ -98,10 +98,19 @@ const Home = () => {
           <h1 className="text-[150px] ff-main">Section 2</h1>
         </div>
       </section>
-      
+
       {/* 第三個區塊 */}
-      <section className="h-screen  flex items-center justify-center">
-        <h1 className="text-4xl font-bold">Welcome to Section 3</h1>
+      <section
+        className="min-w-full relative h-screen bg-cover bg-center flex items-center justify-center text-white"
+        style={{
+          backgroundImage: `url('src/assets/pictures/cozy-evening-read-stockcake.jpg')`,
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-60"></div>
+
+        <div className="relative flex items-center justify-center h-full">
+          <h1 className="text-[150px] ff-main">Section 3</h1>
+        </div>
       </section>
     </div>
   );
