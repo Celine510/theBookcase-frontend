@@ -25,7 +25,7 @@ export default {
           yellow: '#FFE75F',
           black: '#121318',
         },
-        background: '#FDFBE4',
+        background: '#074777',
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',

@@ -1,5 +1,4 @@
 import { useRef, WheelEvent } from 'react';
-import TablerMenuDeep from '@/components/icons/TablerMenuDeep';
 import './index.css';
 
 const Home = () => {
@@ -45,18 +44,6 @@ const Home = () => {
         // Photo by <a href="https://unsplash.com/@jmuniz?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Joel Muniz</a> on <a href="https://unsplash.com/photos/girl-reading-book-XqXJJhK-c08?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
-
-        <div className="absolute top-10 left-10">
-          <button className="text-l">
-            <TablerMenuDeep />
-          </button>
-        </div>
-
-        <div className="absolute top-10 right-10">
-          <a href="#" className="uppercase text-xl ff-second">
-            Login
-          </a>
-        </div>
 
         <h1 className="absolute flex flex-col justify-center h-full">
           <div className="pr-[10rem] ff-main text-custom-yellow text-[3rem] md:text-[7rem] lg:text-[9rem]">
