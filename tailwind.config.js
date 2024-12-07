@@ -9,8 +9,23 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      fontFamily: {
+        // TODO
+        title: [
+          'Cormorant Garamond',
+          'Playfair Display',
+          'Abril Fatface',
+          'sans-serif',
+        ],
+      },
       colors: {
-        background: 'hsl(var(--background))',
+        custom: {
+          blue: '#074777',
+          beige: '#FDFBE4',
+          yellow: '#FFE75F',
+          black: '#121318',
+        },
+        background: '#074777',
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',
