@@ -1,5 +1,3 @@
-import './index.css';
-
 const QuoteOcean = () => {
   return <>QuoteOcean Page</>;
 };

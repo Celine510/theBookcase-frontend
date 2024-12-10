@@ -1,5 +1,4 @@
 import { useRef, WheelEvent } from 'react';
-import './index.css';
 
 const Home = () => {
   //#region 滾動換頁效果

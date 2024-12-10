@@ -1,5 +1,3 @@
-import './index.css';
-
 const Signup = () => {
   return <>Signup Page</>;
 };
