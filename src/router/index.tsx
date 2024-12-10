@@ -22,11 +22,11 @@ const router = createBrowserRouter([
         element: <User />,
       },
       {
-        path: '/quoteocean',
+        path: '/quote-ocean',
         element: <QuoteOcean />,
       },
       {
-        path: '/quotepool',
+        path: '/quote-pool',
         element: <QuotePool />,
       },
     ],

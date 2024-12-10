@@ -64,11 +64,11 @@ const Home = () => {
           </div>
         </h1>
 
-        <div className="absolute bottom-10 left-10 text-xl">
+        <div className="absolute bottom-10 left-10 text-l">
           帶來啟發的書庫，記錄你的閱讀之旅。
         </div>
 
-        <div className="absolute bottom-10 right-10 text-xl">Today’s quote</div>
+        <div className="absolute bottom-10 right-10 text-l">Today’s quote</div>
       </section>
 
       {/* 第二個區塊 */}

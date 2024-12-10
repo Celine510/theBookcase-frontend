@@ -4,14 +4,11 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <>
-      <div className="absolute top-10 left-10">
-        <button className="text-l">
+      <div className="flex justify-between items-center w-[100%] absolute top-6">
+        <button className="text-l pl-6">
           <TablerMenuDeep />
         </button>
-      </div>
-
-      <div className="absolute top-10 right-10">
-        <Link className="uppercase text-xl ff-second" to="/login">
+        <Link className="uppercase text-l ff-second pr-6" to="/login">
           Login
         </Link>
       </div>

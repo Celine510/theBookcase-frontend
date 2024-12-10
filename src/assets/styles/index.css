@@ -62,8 +62,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    color: #fff;
+    @apply bg-background text-foreground text-custom-mainText;
     font-family: 'Playfair Display', sans-serif;
   }
 }

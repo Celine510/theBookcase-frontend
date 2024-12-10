@@ -24,6 +24,8 @@ export default {
           beige: '#FDFBE4',
           yellow: '#FFE75F',
           black: '#121318',
+          mainText: '#ffffff',
+          subText: 'rgb(190 190 190)',
         },
         background: '#074777',
         foreground: 'hsl(var(--foreground))',
