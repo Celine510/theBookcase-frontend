@@ -2,8 +2,14 @@ import { DocumentReference } from 'firebase/firestore';
 
 export interface ICategory {
   id: string;
-  name?: string;
-  [key: string]: any;
+  name: string;
+  [key: string]: unknown;
+}
+
+export interface ITags {
+  id: string;
+  name: string;
+  [key: string]: unknown;
 }
 
 export interface IQuoteList {
@@ -19,3 +25,13 @@ export interface IQuoteList {
   tag_name?: string;
   user: DocumentReference;
 }
+
+export interface IQuoteFormList {
+  name: string;
+  label: string;
+  placeholder: string;
+  description?: string;
+  isSelect?: boolean;
+}
+
+export type formFieldName = "sentence" | "book_name_zh" | "book_author_zh" | "page"
