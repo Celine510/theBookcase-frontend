@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import { Link } from 'react-router-dom';
 
@@ -47,8 +47,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ButtonYellowBg } from '@/components/ButtonYellowBg';
+import { useAlertStore } from '@/stores/useAlertStore';
 
 const User = () => {
+  const { openAlert } = useAlertStore();
   const quoteColumns = [
     { header: 'Quote', accessorKey: 'sentence' },
     { header: "Book's name", accessorKey: 'book_name_zh' },
@@ -60,8 +62,8 @@ const User = () => {
   const [quoteList, setQuoteList] = useState<IQuoteList[]>([]);
 
   // get quotations
-  useEffect(() => {
-    getDocs(collection(db, 'quotations')).then((res) => {
+  const getQuoteList = async () => {
+    await getDocs(collection(db, 'quotations')).then((res) => {
       const arr: IQuoteList[] = [];
       res.docs.forEach((item) => {
         const obj = { ...item.data(), id: item.id };
@@ -69,6 +71,10 @@ const User = () => {
       });
       setQuoteList(arr);
     });
+  };
+
+  useEffect(() => {
+    getQuoteList();
   }, []);
 
   const quoteFormList: IQuoteFormList[] = [
@@ -149,7 +155,6 @@ const User = () => {
   const selectFormCategory = (value: string) => {
     if (formCategories.includes(value)) return;
     const arr = [...formCategories, value];
-    console.log(123);
 
     setFormCategories(arr);
   };
@@ -172,6 +177,11 @@ const User = () => {
   };
 
   //#endregion
+
+  //#region form
+  // form visible control
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const closeDialog = () => setIsOpenDialog(false);
 
   // form validate
   const formSchema = z.object({
@@ -198,16 +208,76 @@ const User = () => {
     },
   });
 
+  const { reset } = form;
+
   // 另外處理類別驗證
   const [validateFormCategory, setValidateFormCategory] = useState(true);
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setValidateFormCategory(formCategories.length > 0);
     if (!formCategories.length) return;
 
-    console.log(values);
-    console.log(formCategories);
-    console.log(formTags);
+    // 已有相同句子
+    const quotationsRef = collection(db, 'quotations');
+    const querySentence = query(
+      quotationsRef,
+      where('sentence', '==', values.sentence),
+    );
+
+    const querySentenceSnapshot = await getDocs(querySentence);
+    if (querySentenceSnapshot.docs.length) {
+      openAlert('錯誤', '已有相同金句');
+      return;
+    }
+
+    // 查詢相同書
+    const booksRef = collection(db, 'books');
+    const q = query(booksRef, where('name_zh', '==', values.book_name_zh));
+
+    const querySnapshot = await getDocs(q);
+    const bookInfo = querySnapshot.docs[0];
+
+    // 沒對應書
+    if (querySnapshot.docs.length === 0) {
+      // *先新增書，取得參考
+      // addDoc 自動生成 ID
+      // setDoc 需指定 ID
+      const bookDocRef = await addDoc(collection(db, 'books'), {
+        name_zh: values.book_name_zh,
+        author_zh: values.book_author_zh,
+        // catrgory 先不綁
+      });
+
+      // 再新增 quote
+      await addDoc(collection(db, 'quotations'), {
+        ...values,
+        book: bookDocRef,
+        tags: formTags,
+        categories: formCategories,
+      });
+    } else {
+      addDoc(collection(db, 'quotations'), {
+        ...values,
+        book: bookInfo.ref,
+        book_name_zh: bookInfo.data().name_zh,
+        book_author_zh: bookInfo.data().author_zh,
+        tags: formTags,
+        categories: formCategories,
+      });
+    }
+
+    // * 新增 quotations 的 tags & categories 存名稱就好
+    // * tags & categories db不用存參考，都存名稱，要透過tags取得時用名稱比對
+
+    // 清空、關閉表單
+    reset();
+    setFormCategories([]);
+    setFormTags([]);
+    closeDialog();
+    getQuoteList();
+    openAlert('成功', '新增成功');
   };
+  //#endregion
 
   return (
     <div className="p-20">
@@ -266,7 +336,7 @@ const User = () => {
       {/* List */}
       <div className="mt-10">
         <div className="mb-4 flex justify-end">
-          <AlertDialog>
+          <AlertDialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
             <AlertDialogTrigger asChild>
               <ButtonYellowBg context="新增" />
             </AlertDialogTrigger>
