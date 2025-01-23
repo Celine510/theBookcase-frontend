@@ -19,9 +19,11 @@ export interface IQuoteList {
   book_name_zh?: string;
   page?: number;
   sentence: string;
-  category?: DocumentReference;
-  category_name?: string;
-  tag?: DocumentReference;
+  // category?: DocumentReference;
+  categories: string[];
+  // category_name?: string;
+  tags: string[];
+  // tag?: DocumentReference;
   tag_name?: string;
   user: DocumentReference;
 }

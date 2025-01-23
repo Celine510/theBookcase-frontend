@@ -54,7 +54,7 @@ const User = () => {
   const quoteColumns = [
     { header: 'Quote', accessorKey: 'sentence' },
     { header: "Book's name", accessorKey: 'book_name_zh' },
-    { header: 'Categories', accessorKey: 'category_name' },
+    { header: 'Categories', accessorKey: 'categories' },
     { header: 'Tags', accessorKey: 'tag_name' },
     { header: 'Page', accessorKey: 'page' },
   ];
@@ -115,11 +115,46 @@ const User = () => {
   ];
 
   // 選中的
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedTag, setSelectedTag] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('allCategory');
+  const [selectedTag, setSelectedTag] = useState('allTag');
   // for filter
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [tags, setTags] = useState<ITags[]>([]);
+
+  useEffect(() => {
+    if (selectedCategory === 'allCategory' && selectedTag === 'allTag') {
+      getQuoteList();
+      return;
+    }
+
+    const chosenCategory = categories.find(
+      (item) => item.id === selectedCategory,
+    );
+    const chosenTag = tags.find((item) => item.id === selectedTag);
+
+    const filterQuoteList = quoteList.filter((item) => {
+      if (selectedCategory !== 'all' && selectedTag !== 'all') {
+        const isCategory = item.categories.includes(chosenCategory!.name);
+        const isTag = item.tags.includes(chosenTag!.name);
+        if (isCategory && isTag) return item;
+      }
+      if (selectedCategory !== 'all') {
+        const isCategory = item.categories.includes(chosenCategory!.name);
+        if (isCategory) return item;
+      }
+
+      if (selectedTag !== 'all') {
+        const isTag = item.tags.includes(chosenTag!.name);
+        if (isTag) return item;
+      }
+
+      // return true;
+    });
+
+    console.log(filterQuoteList);
+
+    setQuoteList(filterQuoteList);
+  }, [selectedCategory, selectedTag]);
 
   //#region form - category & tag
 
@@ -285,7 +320,7 @@ const User = () => {
       {/* categories & TODO filter */}
       <RadioGroup
         defaultValue="allCategory"
-        className="flex flex-wrap gap-4"
+        className="flex flex-wrap items-center gap-4"
         onValueChange={setSelectedCategory}
       >
         {categories.map((item) => {
@@ -310,7 +345,7 @@ const User = () => {
       {/* tags & TODO filter */}
       <RadioGroup
         defaultValue="allTag"
-        className="mt-4 flex flex-wrap gap-4"
+        className="mt-4 flex flex-wrap items-center gap-4"
         onValueChange={setSelectedTag}
       >
         {tags.map((item) => {
